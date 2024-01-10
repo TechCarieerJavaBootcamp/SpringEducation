@@ -13,7 +13,5 @@ public class SpringEducationApplication {
 		SpringApplication.run(SpringEducationApplication.class, args);
 	}
 
-	String empty = StringUtils.EMPTY;
-	String space = StringUtils.SPACE;
 
 }

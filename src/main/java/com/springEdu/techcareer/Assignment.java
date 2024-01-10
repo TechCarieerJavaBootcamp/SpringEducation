@@ -19,7 +19,7 @@ public class Assignment {
      * Örnek: Sedan olanlar aylık olarak kiralanacaksa günlük 300 liradan 30 gün.
      * SUV için ek olarak aracın yaşına göre ek bir katsayı belirlenip ücretin hesaplanması.
      *
-     *NOT:  Buradaki kural setini kendi kural setiniz ile revize edebilirsiniz.
+     * NOT: Buradaki kural setini kendi kural setiniz ile revize edebilirsiniz.
      */
 
 }

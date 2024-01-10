@@ -15,7 +15,7 @@ public class PostConstructAnotation {
     @PostConstruct
     @Order(1)
     public void test(){
-        System.out.println("İlk çağırılan metot.");
+//        System.out.println("İlk çağırılan metot.");
     }
 
     @PostConstruct

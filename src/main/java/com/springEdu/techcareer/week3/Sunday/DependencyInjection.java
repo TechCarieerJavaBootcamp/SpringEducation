@@ -11,7 +11,7 @@ public class DependencyInjection implements CommandLineRunner {
      * Field Injection
      */
     @Autowired
-    StudentService studentService;
+    StudentService1 studentService;
 
     /**
      * Constructor Injection

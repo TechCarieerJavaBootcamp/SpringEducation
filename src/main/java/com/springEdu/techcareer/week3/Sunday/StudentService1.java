@@ -3,7 +3,7 @@ package com.springEdu.techcareer.week3.Sunday;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StudentService {
+public class StudentService1 {
 
     private String name;
 
@@ -14,4 +14,5 @@ public class StudentService {
     public void setName(String name) {
         this.name = name;
     }
+
 }
