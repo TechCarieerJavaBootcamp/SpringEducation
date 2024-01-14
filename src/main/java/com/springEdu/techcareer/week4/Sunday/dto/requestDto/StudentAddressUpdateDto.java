@@ -1,4 +1,4 @@
-package com.springEdu.techcareer.week4.Sunday.dto;
+package com.springEdu.techcareer.week4.Sunday.dto.requestDto;
 
 import lombok.Getter;
 import lombok.Setter;

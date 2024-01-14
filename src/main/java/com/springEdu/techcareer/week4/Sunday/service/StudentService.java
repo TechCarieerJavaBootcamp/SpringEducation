@@ -1,28 +1,46 @@
 package com.springEdu.techcareer.week4.Sunday.service;
 
-import com.springEdu.techcareer.week4.Sunday.dto.StudentAddressUpdateDto;
-import com.springEdu.techcareer.week4.Sunday.dto.StudentSaveRequestDto;
+import com.springEdu.techcareer.week4.Sunday.dto.requestDto.StudentAddressUpdateDto;
+import com.springEdu.techcareer.week4.Sunday.dto.requestDto.StudentSaveRequestDto;
+import com.springEdu.techcareer.week4.Sunday.dto.responseDto.StudentListByNameResponseDto;
 import com.springEdu.techcareer.week4.Sunday.model.Student;
 import com.springEdu.techcareer.week4.Sunday.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ModelMapper modelMapper;
 
+
+
     public boolean saveStudent(StudentSaveRequestDto studentSaveRequestDto) {
         Student student = convertToStudentFromStudentSaveRequestDto(studentSaveRequestDto);
         studentRepository.save(student);
+        return true;
+    }
+
+   // @SneakyThrows
+    public boolean saveStudent1(StudentSaveRequestDto studentSaveRequestDto) throws Exception {
+        Student student = convertToStudentFromStudentSaveRequestDto(studentSaveRequestDto);
+        try {
+            studentRepository.save(student);
+        }catch (Exception e){
+            throw new Exception("Bir hata ile karşılaşıldı");
+        }
         return true;
     }
 
@@ -42,24 +60,52 @@ public class StudentService {
     }
 
     private Student convertToStudentFromStudentSaveRequestDto3(StudentSaveRequestDto studentSaveRequestDto) {
-        return modelMapper.map(studentSaveRequestDto, Student.class);
+        Student student = modelMapper.map(studentSaveRequestDto, Student.class);
+        return student;
     }
 
     public String updateStudentAddress(StudentAddressUpdateDto studentAddressUpdateDto) {
         Long id = studentAddressUpdateDto.getId();
         String address = studentAddressUpdateDto.getAddress();
 
-        Optional<Student> studentById = studentRepository.findById(id);
 
         try {
-            Student student = studentById.get();
-            student.setAddress(address);
-            studentRepository.save(student);
-            return "Güncelleme başarılı";
+            Optional<Student> studentById = studentRepository.findById(id);
+            if(studentById.isPresent()) {
+                Student student = studentById.get();
+                student.setAddress(address);
+                studentRepository.save(student);
+                return "Güncelleme başarılı";
+            }
+            return "Bu Id'ye sahip kullanıcı bulunmamaktadır.";
 
         } catch (Exception e) {
             e.printStackTrace();
-            return String.format("%s Id'ye sahip bir öğrenci bulunmamaktadır!", id);
+            return "Bir hata ile karılaşıldı! Tekrar deneyin.";
         }
+
     }
+
+    public List<StudentListByNameResponseDto> getAllStudentByName(String studentName) {
+        List<StudentListByNameResponseDto> studentListByNameResponseDtoList = new ArrayList<>();
+
+        List<Student> allStudentsByName = studentRepository.findAllByStudentName(studentName);
+
+        for (Student student : allStudentsByName) {
+            StudentListByNameResponseDto studentListByNameResponseDto = modelMapper.map(student, StudentListByNameResponseDto.class);
+            studentListByNameResponseDtoList.add(studentListByNameResponseDto);
+        }
+        return studentListByNameResponseDtoList;
+    }
+
+
+    public List<StudentListByNameResponseDto> getAllStudentByName1(String studentName) {
+        List<Student> allStudentsByName = studentRepository.findAllByStudentName(studentName);
+       return allStudentsByName.stream()
+                .map(student -> modelMapper.map(student, StudentListByNameResponseDto.class))
+                .toList();
+    }
+
+
+
 }
